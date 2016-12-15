@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('api/sintegra/{cnpj}', 'Api\SintegraApiController@getSintegraCNPJ');
