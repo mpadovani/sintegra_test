@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 
 Route::get('listar-sintegra', 'Sintegra\SintegraController@loadSintegra');
+Route::get('atualizarTabelaSintegra', 'Sintegra\SintegraController@loadTableSintegra');
 
 
 /* ROUTES API */

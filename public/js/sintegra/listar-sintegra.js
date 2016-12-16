@@ -21,12 +21,18 @@ $(document).ready(function() {
 
 			success: function(data){
 				$('#confirmModal').modal('hide'); 
+				refreshTableSintegra();
 			},
 			error: function(xhr, ajaxOptions, thrownError){
 				alert("Error Status: " + xhr.status + " Thrown Errors: "+thrownError);
 			}
 		});
-
-
 	});
 });
+
+function refreshTableSintegra() {
+	$('#tabelaSintegra').fadeOut();
+		$('#tabelaSintegra').load('/atualizarTabelaSintegra', function() {
+		$('#tabelaSintegra').fadeIn();
+	});
+}
