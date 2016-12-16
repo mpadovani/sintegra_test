@@ -22,8 +22,10 @@ class SintegraApiController extends Controller {
         $valorArr = []; 
 
 
-        //retirar tags de comentarios
+        //retirar tags de comentarios. retirar &nbsp;, retirar :
         $data = preg_replace('/<!--(.*)-->/Uis', '', $data);
+        $data = preg_replace('/&nbsp;/Uis', '', $data);
+        $data = preg_replace('/:/Uis', '', $data);
 
         //capturar todas as tabelas
         $regexp = "<td\s[^>]*class=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/td>";
@@ -52,7 +54,7 @@ class SintegraApiController extends Controller {
             $json_value["response"] = "";
             // Junta arrays em title e valor transformar em JSON
             foreach ($tituloArr as $key => $value) {
-                $json_value[utf8_encode($value)] = $valorArr[$key];
+                $json_value[utf8_encode($value)] = trim($valorArr[$key]);
             }
 
         }
@@ -98,11 +100,13 @@ class SintegraApiController extends Controller {
         return $this->capturarDadosWeb("http://www.sintegra.es.gov.br/resultado.php","num_cnpj=$cnpj&num_ie=&botao=Consultar");
     }
 
-
+    //API SALVAR E LISTAR JSON
     public function postSintegraCNPJ(Request $request) 
     {
         $data = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true); 
-        $cnpj = $data["cnpj"];
+        
+        $cnpj = trim($data["cnpj"]);
+
         $resultado_json = $this->requisicaoSintegraES( $cnpj );
         $sintegra = new Sintegra;
         $verificaCnpj = count($sintegra->where('cnpj', $cnpj)->get());
@@ -119,7 +123,9 @@ class SintegraApiController extends Controller {
         return $resultado_json;
     }
 
-    public function deleteSintegra($id) {
+    //DELETE SINTEGRA
+    public function deleteSintegra($id) 
+    {
         $sintegra = new Sintegra;
 
         $res = $sintegra->where('id', $id)->delete();

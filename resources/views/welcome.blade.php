@@ -26,9 +26,11 @@
         </div>
         <div class="panel-body">
             <div class="col-md-12">
-                <div class="input-group form">
-                    <span id="message"></span>
-                </div>
+
+                <span id="message"></span>
+
+                <span id="json"></span>
+
             </div>
         </div>
     </div>

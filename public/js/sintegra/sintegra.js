@@ -1,6 +1,10 @@
 $(document).ready(function(){
 	$("#buscarAPI").unbind("click").click( function() {
 
+		$("#sintegraAPI").show();
+		$("#message").html("");
+		$("#json").html("");
+
 		if ( $("#cnpj").val() == "" ) {
 			return false;
 		}
@@ -23,6 +27,16 @@ $(document).ready(function(){
 
 				if (obj.status == "400") {
 					$("#message").html(obj.response)
+				}
+				else {
+					var html = "";
+					$.each(obj, function (key, data) {
+						if ( key != "status" && key != 'response' ) {
+							html += "<div class='row'><div class='col-md-6'><b>"+key+":</b> "+data+"</div></div";
+							$("#json").html(html)
+						}
+
+					});
 				}
 			},
 			error: function(xhr, ajaxOptions, thrownError){
