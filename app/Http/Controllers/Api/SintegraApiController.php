@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\Sintegra;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request; 
 use App\Http\Requests;
 
@@ -113,7 +114,7 @@ class SintegraApiController extends Controller {
 
         if ( $verificaCnpj == 0 ) {
 
-            $sintegra->idusuario = 1;
+            $sintegra->idusuario = Auth::user()->id;
             $sintegra->cnpj = $cnpj;
             $sintegra->resultado_json = $resultado_json;
 

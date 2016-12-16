@@ -16,7 +16,6 @@ class SintegraController extends Controller {
 
     private function listarSintegra() 
     {
-        
         $sintegra =  \DB::select("SELECT s.id, u.usuario, s.cnpj, s.resultado_json FROM sintegra s LEFT JOIN usuario u ON u.id = s.idusuario");
 
         foreach ($sintegra as $key => $value) {

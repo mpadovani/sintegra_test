@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
+use App\Usuario;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Auth;
+use Request;
+use Redirect;
 
 class AuthController extends Controller
 {
@@ -21,6 +24,21 @@ class AuthController extends Controller
     |
     */
 
+
+    protected $redirectPath = '/';
+
+
+    public function postLogin() 
+    {
+        $auth = Usuario::where('usuario', '=', Request::input('username'))->where('senha', '=', sha1(Request::input('password')))->first();
+
+        if($auth){
+            Auth::login($auth);
+        }
+
+        return Redirect::to('/');
+
+    }
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 
     /**
@@ -28,6 +46,7 @@ class AuthController extends Controller
      *
      * @return void
      */
+
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'getLogout']);
@@ -39,14 +58,15 @@ class AuthController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'usuario' => 'required|max:255|unique:usuario',
             'password' => 'required|confirmed|min:6',
         ]);
     }
+
 
     /**
      * Create a new user instance after a valid registration.
@@ -56,10 +76,9 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        return Usuario::create([
+            'usuario' => $data['usuario'],
+            'senha' => sha1($data['password']),
         ]);
     }
 }

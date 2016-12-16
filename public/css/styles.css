@@ -371,7 +371,6 @@ footer .copy{
 }
 
 .login-bg {
-  background: url(/images/caminhaoLogin.jpg) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

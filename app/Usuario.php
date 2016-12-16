@@ -36,4 +36,5 @@ class Usuario extends Model implements AuthenticatableContract,
      * @var array
      */
     protected $hidden = ['senha'];
+
 }
