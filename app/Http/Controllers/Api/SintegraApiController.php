@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Model\Sintegra;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request; 
+use App\Http\Requests;
 
 class SintegraApiController extends Controller {
     /**
@@ -13,10 +15,9 @@ class SintegraApiController extends Controller {
      * @return Response
      */
 
+    private function parsearData($data) 
+    {
 
-
-    private function parsearData($data) {
-        
         $tituloArr = [];
         $valorArr = []; 
 
@@ -47,7 +48,8 @@ class SintegraApiController extends Controller {
 
         if ( sizeof($valorArr) > 0 ) {
             
-            $json_value["success"] = "True";
+            $json_value["status"] = "200";
+            $json_value["response"] = "";
             // Junta arrays em title e valor transformar em JSON
             foreach ($tituloArr as $key => $value) {
                 $json_value[utf8_encode($value)] = $valorArr[$key];
@@ -55,7 +57,8 @@ class SintegraApiController extends Controller {
 
         }
         else {
-            $json_value["success"] = "False";
+            $json_value["status"] = "400";
+            $json_value["response"] = "Cnpj invalido";
         }
 
 
@@ -63,7 +66,8 @@ class SintegraApiController extends Controller {
 
     }
 
-    private function capturarDadosWeb($url, $data) {
+    private function capturarDadosWeb($url, $data) 
+    {
         //Cria arquivo de cookie temporario 
         $fp = fopen("/tmp/cookie.txt", "w");
         fclose($fp);
@@ -89,22 +93,21 @@ class SintegraApiController extends Controller {
     }   
 
 
-    private function requisicaoSintegraES($cnpj) {
+    private function requisicaoSintegraES($cnpj) 
+    {
         return $this->capturarDadosWeb("http://www.sintegra.es.gov.br/resultado.php","num_cnpj=$cnpj&num_ie=&botao=Consultar");
     }
 
 
-    public function getSintegraCNPJ( $cnpj ) {
-
+    public function postSintegraCNPJ(Request $request) 
+    {
+        $data = sizeof($_POST) > 0 ? $_POST : json_decode($request->getContent(), true); 
+        $cnpj = $data["cnpj"];
+        $resultado_json = $this->requisicaoSintegraES( $cnpj );
         $sintegra = new Sintegra;
-
         $verificaCnpj = count($sintegra->where('cnpj', $cnpj)->get());
 
-       
-
         if ( $verificaCnpj == 0 ) {
-
-            $resultado_json = $this->requisicaoSintegraES( $cnpj );
 
             $sintegra->idusuario = 1;
             $sintegra->cnpj = $cnpj;
@@ -113,6 +116,19 @@ class SintegraApiController extends Controller {
             $sintegra->save();
         }
 
+        return $resultado_json;
+    }
+
+    public function deleteSintegra($id) {
+        $sintegra = new Sintegra;
+
+        $res = $sintegra->where('id', $id)->delete();
+
+        if ( !$res ) {
+            return ['response' => 'Sintegra nao encontrado', 'status' => '400'];
+        }
+        
+        return ['response' => 'Sintegra deletado com sucesso', 'status' => '200'];
         
     }
 

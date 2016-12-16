@@ -1,45 +1,39 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Laravel</title>
+@include('includes/head')
+@include('includes/top')
+@include('includes/menu')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Laravel 5</div>
+<div class="col-md-10">
+    <div class="content-box-large">
+        <div class="panel-heading">
+            <div class="panel-title">Buscar</div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="input-group form">
+                    <input id="cnpj" type="text" class="form-control" placeholder="CNPJ...">
+                    <span class="input-group-btn">
+                        <button id="buscarAPI" class="btn btn-primary" type="button">Buscar</button>
+                    </span>
+                </div>
             </div>
         </div>
-    </body>
-</html>
+    </div>
+
+    <div class="content-box-large" id="sintegraAPI" style="display: none;">
+        <div class="panel-heading">
+            <div class="panel-title">Sintegra API</div>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-12">
+                <div class="input-group form">
+                    <span id="message"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="{{ url('js/sintegra/sintegra.js') }}"></script>

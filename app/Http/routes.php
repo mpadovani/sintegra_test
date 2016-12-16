@@ -11,4 +11,17 @@
 |
 */
 
-Route::get('api/sintegra/{cnpj}', 'Api\SintegraApiController@getSintegraCNPJ');
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+
+Route::get('listar-sintegra', 'Sintegra\SintegraController@loadSintegra');
+
+
+/* ROUTES API */
+
+Route::post('api/sintegra', 'Api\SintegraApiController@postSintegraCNPJ');
+Route::delete('api/delete-sintegra/{id}', 'Api\SintegraApiController@deleteSintegra');
+/* FIM */
